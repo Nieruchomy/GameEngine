@@ -1,3 +1,15 @@
 ﻿  Game.cpp
+h:\development\gamedevelopment\gamedevelopment\ecs.h(67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  h:\development\gamedevelopment\gamedevelopment\game.cpp(64): note: see reference to function template instantiation 'T &Entity::addComponent<Transform,int,int,int,int,int>(int &&,int &&,int &&,int &&,int &&)' being compiled
+          with
+          [
+              T=Transform
+          ]
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  TextureManager.cpp
+  Map.cpp
+  GameObject.cpp
   GameDevelopment.vcxproj -> H:\Development\GameDevelopment\Debug\GameDevelopment.exe
   GameDevelopment.vcxproj -> H:\Development\GameDevelopment\Debug\GameDevelopment.pdb (Partial PDB)

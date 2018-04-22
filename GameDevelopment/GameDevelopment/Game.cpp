@@ -1,9 +1,17 @@
 #include "Game.h"
+#include "TextureManager.h"
 #include "Map.h"
+#include "Components.h"
+#include "Vector2.h "
+#include "Collision.h"
 
-GameObject* player;
+SDL_Event Game::event;
 SDL_Renderer* Game::renderer = nullptr;
 Map* map;
+Manager manager;
+
+auto& player(manager.addEntity());
+auto& wall(manager.addEntity());
 
 Game::Game()
 {
@@ -45,18 +53,28 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = true;
 		std::cout << "All subsystems initialised!..." << std::endl;
 
-	} else {
+	}
+	else {
 		isRunning = false;
 		std::cout << "ERROR: subsystems not initialised!..." << std::endl;
 	}
 	map = new Map();
-	player = new GameObject("assets/mad.png", 0, 0);
 
+	//ECS implementations
+	player.addComponent<Transform>(50, 50, 159, 123, 1);
+	player.addComponent<Sprite>("assets/wiz.png");
+	player.addComponent<InputController>();
+	player.addComponent<Collider>("player");
+
+	wall.addComponent<Transform>(1.0f, 300.0f, 300, 20, 1);
+	wall.addComponent<Sprite>("assets/water.png");
+	wall.addComponent<Collider>("wall");
 }
 
 void Game::handleEvents()
 {
-	SDL_Event event;
+
+
 	SDL_PollEvent(&event);
 	switch (event.type)
 	{
@@ -68,17 +86,21 @@ void Game::handleEvents()
 
 void Game::update()
 {
-	player->Update();
+	manager.refresh();
+	manager.update();
+
+	if (Collision::AABB(player.getComponent<Collider>().collider, wall.getComponent<Collider>().collider))
+	{
+		player.getComponent<Transform>().velocity * -1;
+		std::cout << "Wall hit!" << std::endl;
+	}
 }
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
-
-	//placeholder for stuff to render
 	map->DrawMap();
-	player->Render();
-
+	manager.draw();
 	SDL_RenderPresent(renderer);
 }
 
